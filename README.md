@@ -23,11 +23,11 @@ O **DEV.SPOT** é um aplicativo de portfólio moderno que apresenta a identidade
 ---
 
 ## 📸 Screenshots
-| Home (Dark Mode) | Home (White Mode) | Sobre nós |
-| :---: | :---: | :---: |
-| ![Home Dark](https://via.placeholder.com/200x400?text=Print+Home+Dark) | ![Home Light](https://via.placeholder.com/200x400?text=Print+Home+Light) | ![Sobre](https://via.placeholder.com/200x400?text=Print+Sobre) |
+| Home (Dark Mode) | Home (White Mode) | About (White Mode) | About Dark (Dark Mode) |
+| :---: | :---: | :---: | :---: |
+| ![Home Dark](./src/assets/HomeDark.png) | ![Home Light](./src/assets/HomeWhite.png) | ![Sobre ](./src/assets/AboutWhite.png) | ![Sobre](./src/assets/AboutDark.png)
 
-> **Nota:** Substitua as imagens acima pelos prints reais do seu app após rodar no emulador/celular.
+>
 
 ---
 
@@ -44,11 +44,11 @@ O **DEV.SPOT** é um aplicativo de portfólio moderno que apresenta a identidade
 ```text
 /
 ├── src/
-│   ├── components/       # Componentes reutilizáveis (SocialButton)
-│   ├── screens/          # Telas do app (Home, About)
-│   └── assets/           # Imagens e ícones locais
-├── App.js                # Configuração da Navegação
-└── package.json          # Dependências do projeto
+│   ├── components/                 SocialButton
+│   ├── screens/ AboutScreen & HomeScreen
+│   └── assets/
+├── App.js 
+└── package.json 
 ``` 
 ---
 

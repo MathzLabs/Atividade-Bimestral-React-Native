@@ -4,8 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function SocialButton({ icon, label }) {
   return (
-    <TouchableOpacity 
-      style={styles.socialButton} 
+    <TouchableOpacity
+      style={styles.socialButton}
       onPress={() => Alert.alert(`Rede Social`, `Você clicou no ${label}`)}
     >
       <MaterialCommunityIcons name={icon} size={24} color="#22D4FD" style={styles.icon} />
