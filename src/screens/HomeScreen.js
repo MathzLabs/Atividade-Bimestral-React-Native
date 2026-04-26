@@ -8,142 +8,259 @@ import {
   Alert,
   Switch,
   ScrollView,
+  SafeAreaView,
+  Linking,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function HomeScreen({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled(!isEnabled);
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    Alert.alert("Switch pressionado");
+  };
+
+  const openLink = async (url) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Erro ao abrir link: ${url}`);
+    }
+  };
+
+  // Tema dinâmico
+  const theme = {
+    background: isEnabled ? "#FFFFFF" : "#000d1f",
+    text: isEnabled ? "#000d1f" : "#FFFFFF",
+    description: isEnabled ? "#555555" : "#AFB2B1",
+    card: isEnabled ? "#F0F0F0" : "#051321",
+    accent: "#22D4FD",
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.logo}>DEV.SPOT ✦</Text>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.content}>
+          {/* Header Logo */}
+          <View style={styles.header}>
+            <Text style={[styles.logo, { color: theme.text }]}>
+              DEV.SPOT <Text style={styles.sparkle}>✦</Text>
+            </Text>
+          </View>
 
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{ uri: "https://i.pravatar.cc/400" }}
-            style={styles.image}
-          />
-        </View>
+          {/* MOLDURA DUPLA COM AS DUAS FOTOS */}
+          <View style={styles.duoPhotoContainer}>
+            {/* Foto 1 (Matheus) - Deslocada para a esquerda/trás */}
+            <View style={styles.photoWrapperLeft}>
+              <View style={styles.frameBehind} />
+              <Image
+                source={{ uri: "https://github.com/MathzLabs.png" }}
+                style={styles.image}
+              />
+            </View>
 
-        <Text style={styles.title}>
-          Eleve seu negócio digital a outro nível
-          <Text style={{ color: "#22D4FD" }}>
-            {" "}
-            com um Front-end de qualidade!
+            {/* Foto 2 (Sarah) - Deslocada para a direita/frente */}
+            <View style={styles.photoWrapperRight}>
+              <View style={[styles.frameBehind, { borderColor: "#FF6B6B" }]} />
+              <Image
+                source={{ uri: "https://github.com/SarahBea11.png" }}
+                style={styles.image}
+              />
+            </View>
+          </View>
+
+          {/* Título e Descrição */}
+          <Text style={[styles.title, { color: theme.text }]}>
+            Eleve seu negócio digital
+            <Text style={styles.highlight}>
+              {" "}
+              com um Front-end de qualidade!
+            </Text>
           </Text>
-        </Text>
 
-        <Text style={styles.description}>
-          Olá! Sou Joana Santos, desenvolvedora Front-end com especialidade em
-          React, HTML e CSS. Ajudo pequenos negócios e designers a colocarem em
-          prática boas ideias. Vamos conversar?
-        </Text>
+          <Text style={[styles.description, { color: theme.description }]}>
+            Olá! Somos Matheus e Sarah, desenvolvedores focados em transformar
+            ideias em interfaces incríveis. Especialistas em React Native,
+            ajudamos a tirar seu projeto do papel.
+          </Text>
 
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={() => navigation.navigate("Sobre")}
-        >
-          <Text style={styles.buttonText}>Sobre mim</Text>
-        </TouchableOpacity>
+          {/* Botões de Navegação */}
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={() => navigation.navigate("Sobre")}
+          >
+            <Text style={styles.buttonText}>Sobre nós</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={() => Alert.alert("Contato")}
-        >
-          <Text style={styles.buttonText}>Entre em contato!</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={() => Alert.alert("Entre em contato")}
+          >
+            <Text style={styles.buttonText}>Entre em contato!</Text>
+          </TouchableOpacity>
 
-        <Text style={styles.subtitle}>Acesse minhas redes:</Text>
+          {/* Redes Sociais e Switch */}
+          <Text style={[styles.subtitle, { color: theme.text }]}>
+            Nossas redes:
+          </Text>
 
-        <View style={styles.switchContainer}>
-          <Text style={{ color: "#C0C0C0" }}>Alterar visualização</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#22D4FD" }}
-            thumbColor={isEnabled ? "#fff" : "#f4f3f4"}
-            value={isEnabled}
-            onValueChange={toggleSwitch}
+          <View style={styles.switchContainer}>
+            <Text style={[styles.switchLabel, { color: theme.description }]}>
+              {isEnabled ? "Modo Claro" : "Modo Escuro"}
+            </Text>
+            <Switch
+              trackColor={{ false: "#3e3e3e", true: "#22D4FD" }}
+              thumbColor="#f4f3f4"
+              value={isEnabled}
+              onValueChange={toggleSwitch}
+            />
+          </View>
+
+          {/* Botões Sociais */}
+          <SocialButton
+            icon="github"
+            label="GitHub Matheus"
+            theme={theme}
+            onPress={() => openLink("https://github.com/MathzLabs")}
+          />
+          <SocialButton
+            icon="github"
+            label="GitHub Sarah"
+            theme={theme}
+            onPress={() => openLink("https://github.com/SarahBea11")}
+          />
+          <SocialButton
+            icon="linkedin"
+            label="LinkedIn Matheus"
+            theme={theme}
+            onPress={() =>
+              openLink(
+                "https://www.linkedin.com/in/matheus-prazeres-288aab282/",
+              )
+            }
+          />
+          <SocialButton
+            icon="linkedin"
+            label="LinkedIn Sarah"
+            theme={theme}
+            onPress={() =>
+              openLink("https://www.linkedin.com/in/sarahbeatrizlimapina-/")
+            }
           />
         </View>
 
-        {["GitHub", "LinkedIn", "Instagram", "Twitch"].map((redes) => (
-          <TouchableOpacity key={redes} style={styles.socialButton}>
-            <Text style={styles.socialText}>{redes}</Text>
-          </TouchableOpacity>
-        ))}
-
+        {/* Rodapé */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Desenvolvido por Aluno.{"\n"}Projeto fictício sem fins comerciais.
+            Desenvolvido por Matheus & Sarah.{"\n"}Projeto para atividade
+            acadêmica.
           </Text>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
+const SocialButton = ({ icon, label, onPress, theme }) => (
+  <TouchableOpacity
+    style={[styles.socialButton, { backgroundColor: theme.card }]}
+    onPress={onPress}
+  >
+    <MaterialCommunityIcons
+      name={icon}
+      size={22}
+      color="#22D4FD"
+      style={styles.icon}
+    />
+    <Text style={[styles.socialText, { color: theme.text }]}>{label}</Text>
+  </TouchableOpacity>
+);
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#001a2e",
-  },
-  content: {
-    padding: 25,
+  container: { flex: 1 },
+  content: { paddingHorizontal: 30, alignItems: "center" },
+  header: { marginVertical: 30 },
+  logo: { fontSize: 20, fontWeight: "800", letterSpacing: 2 },
+  sparkle: { color: "#22D4FD" },
+
+  // ESTILO DA MOLDURA DUPLA
+  duoPhotoContainer: {
+    flexDirection: "row",
+    height: 220,
+    width: "100%",
+    justifyContent: "center",
     alignItems: "center",
+    marginVertical: 40,
   },
-  logo: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "bold",
-    marginTop: 40,
-    marginBottom: 30,
+  photoWrapperLeft: {
+    width: 140,
+    height: 140,
+    position: "absolute",
+    left: "15%",
+    zIndex: 1,
   },
-  imageWrapper: {
+  photoWrapperRight: {
+    width: 140,
+    height: 140,
+    position: "absolute",
+    right: "15%",
+    top: 60,
+    zIndex: 2,
+  },
+  frameBehind: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     borderWidth: 2,
     borderColor: "#22D4FD",
     borderRadius: 15,
-    padding: 5,
-    width: "100%",
+    top: 8,
+    left: 8,
   },
   image: {
     width: "100%",
-    height: 250,
-    borderRadius: 10,
+    height: "100%",
+    borderRadius: 15,
+    backgroundColor: "#051321",
   },
+
   title: {
-    color: "#fff",
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "left",
-    marginTop: 25,
+    width: "100%",
     lineHeight: 32,
   },
+  highlight: { color: "#22D4FD" },
   description: {
-    color: "#C0C0C0",
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 24,
-    marginVertical: 20,
+    marginTop: 15,
+    marginBottom: 25,
     textAlign: "left",
+    width: "100%",
   },
   primaryButton: {
     backgroundColor: "#22D4FD",
     width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 8,
+    padding: 16,
+    borderRadius: 12,
+    marginVertical: 6,
   },
   buttonText: {
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 18,
-    color: "#000",
+    fontSize: 16,
+    color: "#000814",
   },
   subtitle: {
-    color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: 30,
+    marginTop: 25,
     alignSelf: "flex-start",
   },
   switchContainer: {
@@ -151,32 +268,32 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginVertical: 15,
+    marginVertical: 10,
   },
+  switchLabel: { fontSize: 14 },
   socialButton: {
     width: "100%",
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: "#22D4FD",
-    backgroundColor: "#001122",
     padding: 12,
-    borderRadius: 10,
-    marginVertical: 6,
+    borderRadius: 12,
+    marginVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 20,
   },
-  socialText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "500",
-  },
+  icon: { marginRight: 15 },
+  socialText: { fontSize: 15, fontWeight: "600" },
   footer: {
     backgroundColor: "#22D4FD",
-    width: "120%", // Para cobrir as bordas se necessário
-    padding: 15,
+    width: "100%",
+    padding: 20,
     marginTop: 40,
   },
   footerText: {
     textAlign: "center",
     fontSize: 12,
-    color: "#000",
+    color: "#000814",
+    fontWeight: "600",
   },
 });
